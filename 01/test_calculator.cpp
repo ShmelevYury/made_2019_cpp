@@ -28,8 +28,8 @@ TEST_CASE("Mul and Divide") {
 
 TEST_CASE("Order of operations") {
   REQUIRE((1 + 5 / 6 + 2) == Calculate("1 + 5 / 6 + 2"));
-  REQUIRE((5 * 6 / 2 * 3 + 1 + 2 + 3 * 5 + 6 / 3) ==
-          Calculate("5 * 6 / 2 * 3 + 1 + 2 + 3 * 5 + 6 / 3"));
+  REQUIRE((5 * 6 / 2 * 3 - 1 + 2 - 3 * 5 + 6 / 3) ==
+          Calculate("5 * 6 / 2 * 3 - 1 + 2 - 3 * 5 + 6 / 3"));
   REQUIRE((5 + 5 * 5) == Calculate("5 + 5 * 5"));
   REQUIRE((5 * 5 + 37) == Calculate("5 * 5 + 37"));
 }
