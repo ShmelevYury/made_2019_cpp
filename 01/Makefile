@@ -2,6 +2,7 @@ CC=g++ -std=c++14
 
 run: run.o calculator.o 
 	$(CC) -o run_calculator run.o calculator.o
+	./run_calculator
 
 test: test_bin
 	./test_calculator

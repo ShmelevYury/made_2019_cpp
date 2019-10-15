@@ -98,6 +98,8 @@ int MinusPlus(Expression* expr) {
   return cumulative;
 }
 
+
+// Изначально функция обрабатывала аргументы комадной строки, так что она работает с cstring
 int Calculate(const char* expression) {
   Expression expr{expression, 0, std::strlen(expression)};
   int result = MinusPlus(&expr);
