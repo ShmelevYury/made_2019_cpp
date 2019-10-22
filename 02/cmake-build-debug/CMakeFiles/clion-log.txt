@@ -1,4 +1,0 @@
-/home/yura/clion-2019.2.2/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/gcc-7 -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 -G "CodeBlocks - Unix Makefiles" /home/yura/made/cpp/made_2019_cpp/02
--- Configuring done
--- Generating done
--- Build files have been written to: /home/yura/made/cpp/made_2019_cpp/02/cmake-build-debug
