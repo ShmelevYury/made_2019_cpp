@@ -1,0 +1,1 @@
+/usr/bin/g++-7  -g   CMakeFiles/02.dir/main.cpp.o  -o 02 

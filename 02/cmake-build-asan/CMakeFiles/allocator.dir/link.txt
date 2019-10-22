@@ -1,0 +1,1 @@
+/usr/bin/g++-7  -g -fsanitize=address,undefined -fno-sanitize-recover=all   CMakeFiles/allocator.dir/allocator.cpp.o CMakeFiles/allocator.dir/test_allocator.cpp.o  -o allocator 
