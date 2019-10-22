@@ -17,10 +17,6 @@ char* LinearAllocator::alloc(size_t size) {
   return pointer;
 }
 
-void LinearAllocator::reset() {
-  end_ = begin_;
-}
+void LinearAllocator::reset() { end_ = begin_; }
 
-LinearAllocator::~LinearAllocator() {
-  free(begin_);
-}
+LinearAllocator::~LinearAllocator() { free(begin_); }

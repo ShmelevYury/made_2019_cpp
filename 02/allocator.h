@@ -3,8 +3,7 @@
 
 #include <cstddef>
 
-class LinearAllocator
-{
+class LinearAllocator {
  public:
   LinearAllocator() = delete;
   explicit LinearAllocator(size_t maxSize);
@@ -22,4 +21,4 @@ class LinearAllocator
   char* capacity_;
 };
 
-#endif //ALLOCATOR_ALLOCATOR_H
+#endif  // ALLOCATOR_ALLOCATOR_H
