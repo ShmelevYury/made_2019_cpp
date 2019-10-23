@@ -8,9 +8,9 @@ class LinearAllocator {
   LinearAllocator() = delete;
   explicit LinearAllocator(size_t maxSize);
   LinearAllocator(const LinearAllocator& rhs) = delete;
-  LinearAllocator(LinearAllocator&& rhs) = delete;
+  LinearAllocator(LinearAllocator&& rhs);
   LinearAllocator& operator=(const LinearAllocator& rhs) = delete;
-  LinearAllocator& operator=(LinearAllocator&& rhs) = delete;
+  LinearAllocator& operator=(LinearAllocator&& rhs);
   char* alloc(size_t size);
   void reset();
   ~LinearAllocator();
@@ -18,7 +18,7 @@ class LinearAllocator {
  private:
   char* begin_;
   char* end_;
-  char* capacity_;
+  size_t size_;
 };
 
 #endif  // ALLOCATOR_ALLOCATOR_H

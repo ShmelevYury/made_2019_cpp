@@ -50,4 +50,5 @@ TEST_CASE("Working with wrong syntax") {
   REQUIRE_THROWS(Calculate("11 + (59)"));
   REQUIRE_THROWS(Calculate("$11 + 12"));
   REQUIRE_THROWS(Calculate("11 + #12"));
+  REQUIRE_THROWS(Calculate("1 / 0"));
 }
