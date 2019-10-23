@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <cstdlib>
 
+// Аллокатор с begin_ == nullptr считается пустым и не выделяет память.
+
 LinearAllocator::LinearAllocator(size_t maxSize) {
   if (maxSize > 0) {
     begin_ = (char*)std::malloc(maxSize);
