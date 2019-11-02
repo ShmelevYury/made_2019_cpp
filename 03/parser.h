@@ -3,8 +3,12 @@
 
 #include <functional>
 
-void ParseStream(std::istream* stream, std::function<void(int)> number_callback,
-                 std::function<void(std::string)> string_callback,
-                 std::function<void()> starting_parsing,
-                 std::function<void()> ending_parsing);
+using TimimgCallback = std::function<void()>;
+using NumberCallback = std::function<void(int)>;
+using StringCallback = std::function<void(std::string)>;
+
+void ParseStream(std::istream& stream, NumberCallback number_callback,
+                 StringCallback string_callback,
+                 TimimgCallback starting_parsing,
+                 TimimgCallback ending_parsing);
 #endif  // PARSER_PARSER_H

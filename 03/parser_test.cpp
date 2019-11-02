@@ -59,7 +59,7 @@ TEST_CASE("Test token") {
   log.Refresh();
   std::stringstream strstream;
   strstream << "abc";
-  ParseStream(&strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
+  ParseStream(strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
   REQUIRE(log.is_started);
   REQUIRE(log.is_ended);
   REQUIRE(IsVecEqual(log.args, std::vector<std::string>{"abc"}));
@@ -69,7 +69,7 @@ TEST_CASE("Test num") {
   log.Refresh();
   std::stringstream strstream;
   strstream << "12";
-  ParseStream(&strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
+  ParseStream(strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
   REQUIRE(log.is_started);
   REQUIRE(log.is_ended);
   REQUIRE(IsVecEqual(log.args, std::vector<std::string>{"12"}));
@@ -79,7 +79,7 @@ TEST_CASE("Combine nums and tokens") {
   log.Refresh();
   std::stringstream strstream;
   strstream << "12 43 abc kl 9 hj 8";
-  ParseStream(&strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
+  ParseStream(strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
   REQUIRE(log.is_started);
   REQUIRE(log.is_ended);
   REQUIRE(IsVecEqual(log.args, std::vector<std::string>{"12", "43", "abc", "kl",
@@ -90,7 +90,7 @@ TEST_CASE("Mixed nums and chars") {
   log.Refresh();
   std::stringstream strstream;
   strstream << "12abc anc45,11";
-  ParseStream(&strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
+  ParseStream(strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
   REQUIRE(log.is_started);
   REQUIRE(log.is_ended);
   REQUIRE(IsVecEqual(log.args, std::vector<std::string>{"12abc", "anc45,11"}));
@@ -100,11 +100,22 @@ TEST_CASE("Tabs, spaces and line break") {
   log.Refresh();
   std::stringstream strstream;
   strstream << "12      43kl       a2c \n       k l    9    \n hj 8\n";
-  ParseStream(&strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
+  ParseStream(strstream, PrintNumber, PrintString, PrintStart, PrintEnd);
   REQUIRE(log.is_started);
   REQUIRE(log.is_ended);
   REQUIRE(IsVecEqual(
       log.args,
       std::vector<std::string>{"12", "43kl", "a2c", "k", "l", "9", "hj", "8"}));
+}
+
+TEST_CASE("Test nullptr func") {
+  log.Refresh();
+  std::stringstream strstream;
+  strstream << "abc";
+  REQUIRE_NOTHROW(ParseStream(strstream, PrintNumber, PrintString, nullptr, PrintEnd));
+  REQUIRE_NOTHROW(ParseStream(strstream, PrintNumber, PrintString, PrintStart, nullptr));
+  REQUIRE_NOTHROW(ParseStream(strstream, PrintNumber, nullptr, PrintStart, PrintEnd));
+  REQUIRE_NOTHROW(ParseStream(strstream, nullptr, PrintString, PrintStart, PrintEnd));
+  REQUIRE_NOTHROW(ParseStream(strstream, nullptr, nullptr, nullptr, nullptr));
 }
 }  // namespace TestingSpace
