@@ -17,7 +17,7 @@ void ParseStream(std::istream& stream, NumberCallback number_callback,
                  StringCallback string_callback,
                  TimimgCallback starting_parsing,
                  TimimgCallback ending_parsing) {
-  if (!starting_parsing) {
+  if (starting_parsing) {
     starting_parsing();
   }
   std::string token;
