@@ -17,7 +17,7 @@ void ParseStream(std::istream& stream, NumberCallback number_callback,
                  StringCallback string_callback,
                  TimimgCallback starting_parsing,
                  TimimgCallback ending_parsing) {
-  if (starting_parsing) {
+  if (!starting_parsing) {
     starting_parsing();
   }
   std::string token;
@@ -26,7 +26,7 @@ void ParseStream(std::istream& stream, NumberCallback number_callback,
     if (next_char == ' ' || next_char == '\t' || next_char == '\n' ||
         stream.eof()) {
       if (!token.empty()) {
-        if (IsNumber(token) && number_callback) {
+        if (number_callback && IsNumber(token)) {
           number_callback(std::stoi(token));
         } else if (string_callback) {
           string_callback(token);
