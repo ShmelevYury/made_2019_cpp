@@ -5,7 +5,7 @@
 
 using TimimgCallback = std::function<void()>;
 using NumberCallback = std::function<void(int)>;
-using StringCallback = std::function<void(std::string)>;
+using StringCallback = std::function<void(const std::string&)>;
 
 void ParseStream(std::istream& stream, NumberCallback number_callback,
                  StringCallback string_callback,
