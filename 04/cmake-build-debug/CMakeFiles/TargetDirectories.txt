@@ -1,3 +1,0 @@
-/home/yura/made/cpp/made_2019_cpp/04/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/yura/made/cpp/made_2019_cpp/04/cmake-build-debug/CMakeFiles/Matrix.dir
-/home/yura/made/cpp/made_2019_cpp/04/cmake-build-debug/CMakeFiles/edit_cache.dir
