@@ -15,7 +15,7 @@ class Serializer {
   explicit Serializer(std::ostream& out);
 
   template <class T>
-  Error Save(T& obj);
+  Error Save(T&& obj);
 
   template <class... ArgsT>
   Error operator()(ArgsT&&... args);
@@ -36,7 +36,7 @@ class DeSerializer {
   explicit DeSerializer(std::istream& in);
 
   template <class T>
-  Error Load(T& obj);
+  Error Load(T&& obj);
 
   template <class... ArgsT>
   Error operator()(ArgsT&&... args);
@@ -54,23 +54,21 @@ class DeSerializer {
 //Template realisation
 
 template <class T>
-Error Serializer::Save(T& obj) {
+Error Serializer::Save(T&& obj) {
   return obj.Serialize(*this);
 }
 
 template <class T>
-Error ToString(T& val, std::ostream& out) {
+Error ToString(T&& val, std::ostream& out) {
   return Error::CorruptedData;
 }
 
-template <>
-Error ToString<uint64_t>(uint64_t& val, std::ostream& out) {
+Error ToString(uint64_t& val, std::ostream& out) {
   out << val << ' ';
   return Error::NoError;
 }
 
-template <>
-Error ToString<bool>(bool& val, std::ostream& out) {
+Error ToString(bool& val, std::ostream& out) {
   if (val) {
     out << "true ";
   } else {
@@ -81,12 +79,12 @@ Error ToString<bool>(bool& val, std::ostream& out) {
 
 template <class T>
 Error Serializer::Process(T&& val) {
-  return ToString(val, out_);
+  return ToString(std::forward<T>(val), out_);
 }
 
 template <class T, class... ArgsT>
 Error Serializer::Process(T&& val, ArgsT&&... args) {
-  if (ToString(val, out_) == Error::CorruptedData) {
+  if (ToString(std::forward<T>(val), out_) == Error::CorruptedData) {
     return Error::CorruptedData;
   } else {
     return Serializer::Process(std::forward<ArgsT>(args)...);
@@ -99,23 +97,21 @@ Error Serializer::operator()(ArgsT&&... args) {
 }
 
 template <class T>
-Error DeSerializer::Load(T &obj) {
+Error DeSerializer::Load(T&& obj) {
   return obj.Serialize(*this);
 }
 
 template <class T>
-Error FromString(T& val, std::istream& in) {
+Error FromString(T&& val, std::istream& in) {
   return Error::CorruptedData;
 }
 
-template <>
-Error FromString<uint64_t>(uint64_t& val, std::istream& in) {
+Error FromString(uint64_t& val, std::istream& in) {
   in >> val;
   return Error::NoError;
 }
 
-template <>
-Error FromString<bool>(bool& val, std::istream& in) {
+Error FromString(bool& val, std::istream& in) {
   std::string text;
   in >> text;
 
@@ -131,7 +127,7 @@ Error FromString<bool>(bool& val, std::istream& in) {
 
 template <class T>
 Error DeSerializer::Process(T&& val) {
-  return FromString(val, in_);
+  return FromString(std::forward<T>(val), in_);
 }
 
 template <class T, class... ArgsT>
