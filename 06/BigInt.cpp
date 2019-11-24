@@ -1,27 +1,10 @@
 #include "BigInt.h"
 
-BigInt::BigInt() : is_positive_(true) {}
-
-BigInt::BigInt(int num) {
-  if (num < 0) {
-    is_positive_ = false;
-    num *= -1;
-  } else {
-    is_positive_ = true;
-  }
-  if (num == 0) {
-    num_.Push(0);
-  }
-  while (num) {
-    num_.Push(num % 10);
-    num /= 10;
-  }
-}
-
-DynArr<short> SumArr(const DynArr<short>& lhs, const DynArr<short>& rhs) {
-  const DynArr<short>& short_arr = (lhs.Size() < rhs.Size()) ? lhs : rhs;
-  const DynArr<short>& longest_arr = (lhs.Size() < rhs.Size()) ? rhs : lhs;
-  DynArr<short> sum;
+namespace {
+BigInt::NumArr SumArr(const BigInt::NumArr& lhs, const BigInt::NumArr& rhs) {
+  const BigInt::NumArr& short_arr = (lhs.Size() < rhs.Size()) ? lhs : rhs;
+  const BigInt::NumArr& longest_arr = (lhs.Size() < rhs.Size()) ? rhs : lhs;
+  BigInt::NumArr sum;
   short hyp = 0;
   for (size_t i = 0; i < short_arr.Size(); ++i) {
     short sum_num = lhs[i] + rhs[i] + hyp;
@@ -41,13 +24,13 @@ DynArr<short> SumArr(const DynArr<short>& lhs, const DynArr<short>& rhs) {
   return sum;
 }
 
-DynArr<short> DiffArr(const DynArr<short>& long_arr,
-                      const DynArr<short>& short_arr) {
+BigInt::NumArr DiffArr(const BigInt::NumArr& long_arr,
+                       const BigInt::NumArr& short_arr) {
   if (long_arr.Size() < short_arr.Size()) {
     throw std::runtime_error{
         "Wrong parameters of func Diff! Left smaller than right!"};
   }
-  DynArr<short> diff;
+  BigInt::NumArr diff;
   short hyp = 0;
   for (size_t i = 0; i < short_arr.Size(); ++i) {
     short diff_num = long_arr[i] - short_arr[i] + hyp;
@@ -65,13 +48,13 @@ DynArr<short> DiffArr(const DynArr<short>& long_arr,
     throw std::runtime_error{
         "Wrong parameters of func Diff! Left smaller than right!"};
   }
-  while (diff.Top() == 0 && diff.Size() > 1) {
+  while (diff.Back() == 0 && diff.Size() > 1) {
     diff.Pop();
   }
   return diff;
 }
 
-bool IsSmaller(const DynArr<short>& lhs, const DynArr<short>& rhs) {
+bool IsSmaller(const BigInt::NumArr& lhs, const BigInt::NumArr& rhs) {
   if (lhs.Size() < rhs.Size()) {
     return true;
   } else if (lhs.Size() > rhs.Size()) {
@@ -87,7 +70,7 @@ bool IsSmaller(const DynArr<short>& lhs, const DynArr<short>& rhs) {
   return lhs[0] < rhs[0];
 }
 
-bool IsBigger(const DynArr<short>& lhs, const DynArr<short>& rhs) {
+bool IsBigger(const BigInt::NumArr& lhs, const BigInt::NumArr& rhs) {
   if (lhs.Size() > rhs.Size()) {
     return true;
   } else if (lhs.Size() < rhs.Size()) {
@@ -101,6 +84,25 @@ bool IsBigger(const DynArr<short>& lhs, const DynArr<short>& rhs) {
     }
   }
   return lhs[0] > rhs[0];
+}
+}  // unnamed namespace
+
+BigInt::BigInt() : is_positive_(true) {}
+
+BigInt::BigInt(int num) {
+  if (num < 0) {
+    is_positive_ = false;
+    num *= -1;
+  } else {
+    is_positive_ = true;
+  }
+  if (num == 0) {
+    num_.Push(0);
+  }
+  while (num) {
+    num_.Push(num % 10);
+    num /= 10;
+  }
 }
 
 BigInt BigInt::operator+(const BigInt& rhs) const {

@@ -3,9 +3,10 @@
 #include "BigInt.h"
 #include "../catch2/catch.hpp"
 
+#include <limits>
 #include <string>
 
-constexpr int max_int = 2147483647;
+constexpr int max_int = std::numeric_limits<int>::max();
 
 TEST_CASE("Small nums") {
   BigInt a = 5;
