@@ -83,7 +83,8 @@ TEST_CASE("Wrong brackets") {
     std::string text = Format("I would like to buy {}", "potato", 123, 56);
     REQUIRE(false);
   } catch (std::runtime_error& e) {
-    REQUIRE(std::string(e.what()) == "Missing number in the bracket at position 21");
+    REQUIRE(std::string(e.what()) ==
+            "Missing number in the bracket at position 21");
   } catch (...) {
     REQUIRE(false);
   }
@@ -94,10 +95,24 @@ TEST_CASE("Some random tests") {
   REQUIRE(text == "I would like to buy potato");
   text = Format("I would like to buy {1} {0}", "potatoes", 123, 56);
   REQUIRE(text == "I would like to buy 123 potatoes");
-  text = Format("I would like to buy {2} {0} and {1} {3}", "potatoes", 123, 56, "carrots");
+  text = Format("I would like to buy {2} {0} and {1} {3}", "potatoes", 123, 56,
+                "carrots");
   REQUIRE(text == "I would like to buy 56 potatoes and 123 carrots");
-  text = Format("I would like to buy {1} {0} and {2} {3}", "potatoes", 123, 56, "carrots");
+  text = Format("I would like to buy {1} {0} and {2} {3}", "potatoes", 123, 56,
+                "carrots");
   REQUIRE(text == "I would like to buy 123 potatoes and 56 carrots");
-  text = Format("I would like to buy {0} {0} and {0} {0}", "potatoes", 123, 56, "carrots");
-  REQUIRE(text == "I would like to buy potatoes potatoes and potatoes potatoes");
+  text = Format("I would like to buy {0} {0} and {0} {0}", "potatoes", 123, 56,
+                "carrots");
+  REQUIRE(text ==
+          "I would like to buy potatoes potatoes and potatoes potatoes");
+}
+
+TEST_CASE("Test rvalues") {
+  std::string original = "I would like to buy {1} {0} and {2} {3}";
+  std::string arg1 = "potatoes";
+  int arg2 = 123;
+  int arg3 = 56;
+  std::string arg4 = "carrots";
+  std::string formated = Format(original, arg1, arg2, arg3, arg4);
+  REQUIRE(formated == "I would like to buy 123 potatoes and 56 carrots");
 }
