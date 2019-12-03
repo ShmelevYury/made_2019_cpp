@@ -2,36 +2,24 @@
 #define FORMAT_FORMAT_H
 
 #include <cctype>
-#include <iostream>
 #include <limits>
-#include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
 
-class Generic {
- public:
-  virtual void WriteToStream(std::ostream& out) = 0;
-};
-
 template <class T>
-class Specific : public Generic {
- public:
-  explicit Specific(const T& item) : item_(item) {}
-
-  void WriteToStream(std::ostream& out) override { out << item_; }
-
- private:
-  const T& item_;
-};
+inline std::string to_string(T&& x) {
+  std::ostringstream ss;
+  ss << x;
+  return ss.str();
+}
 
 template <class... ArgsT>
 std::string Format(const std::string& text, ArgsT&&... args) {
   std::stringstream result;
-  //  К сожалению список инициализации копирует аргументы, а другого более
-  //  изящного способа я не нашёл, так что пользуюсь shared_ptr.
-  std::vector<std::shared_ptr<Generic>> arguments{
-      std::make_shared<Specific<ArgsT>>(args)...};
+  std::vector<std::string> arguments;
+  arguments.reserve(sizeof...(args));
+  (arguments.emplace_back(to_string<ArgsT>(std::forward<ArgsT>(args))), ...);
   for (size_t pos = 0; pos < text.size(); ++pos) {
     if (text[pos] == '{') {
       ++pos;
@@ -62,7 +50,7 @@ std::string Format(const std::string& text, ArgsT&&... args) {
                                  std::to_string(pos)};
       }
 
-      arguments[num]->WriteToStream(result);
+      result << arguments[num];
     } else if (text[pos] == '}') {
       throw std::runtime_error{"Bracket } before { at position " +
                                std::to_string(pos)};
