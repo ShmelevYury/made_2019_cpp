@@ -23,7 +23,7 @@ class Vector {
   ~Vector() { alloc_.deallocate(begin_, capacity()); }
 
   Vector(const Vector& other)
-      : begin_(alloc_.allocate(other.size())),
+      : begin_(alloc_.allocate(other.capacity())),
         end_(begin_ + other.size()),
         capacity_(begin_ + other.capacity()),
         alloc_(other.alloc_) {
