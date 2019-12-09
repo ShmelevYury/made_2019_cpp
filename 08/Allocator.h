@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <limits>
+#include <cstdlib>
 
 template <class T>
 class Allocator {
@@ -11,9 +12,13 @@ class Allocator {
   using pointer = T*;
   using size_type = size_t;
 
-  pointer allocate(size_type count) { return new T[count]; }
+  pointer allocate(size_type count) {
+    return static_cast<pointer>(std::malloc(sizeof(value_type) * count));
+  }
 
-  void deallocate(pointer ptr, size_type count) { delete[] ptr; }
+  void deallocate(pointer ptr, size_type count) {
+    std::free(ptr);
+  }
 
   size_type max_size() const noexcept {
     return std::numeric_limits<size_t>::max();

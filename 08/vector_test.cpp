@@ -282,3 +282,20 @@ TEST_CASE("Test ReversedRandomAcseesItearator") {
     REQUIRE(it4 == it1);
   }
 }
+
+class IntWrapper {
+ public:
+  IntWrapper() = delete;
+
+  explicit IntWrapper(int value) : value_(value) {}
+
+ private:
+  int value_;
+};
+
+TEST_CASE("Allocator don't call default constructor") {
+  Allocator<IntWrapper> allocator;
+  IntWrapper* ptr;
+  REQUIRE_NOTHROW(ptr = allocator.allocate(8));
+  REQUIRE_NOTHROW(allocator.deallocate(ptr, 8));
+}
