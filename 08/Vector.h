@@ -27,7 +27,9 @@ class Vector {
         end_(begin_ + other.size()),
         capacity_(begin_ + other.capacity()),
         alloc_(other.alloc_) {
-    std::copy(other.begin_, other.end_, begin_);
+    for (size_t i = 0; i < other.size(); ++i) {
+      alloc_.construct(begin_ + i, other.begin_[i]);
+    }
   }
 
   Vector(Vector&& other) noexcept
@@ -50,7 +52,9 @@ class Vector {
     end_ = other.begin_ + other.size();
     capacity_ = other.begin_ + other.capacity();
     alloc_ = other.alloc_;
-    std::copy(other.begin_, other.end(), begin_);
+    for (size_t i = 0; i < other.size(); ++i) {
+      alloc_.construct(begin_ + i, other.begin_[i]);
+    }
     return *this;
   }
 
@@ -78,7 +82,7 @@ class Vector {
       size_t cap = empty() ? 1 : 2 * capacity();
       Reallocate(cap);
     }
-    *end_ = val;
+    alloc_.construct(end_, val);
     ++end_;
   }
 
@@ -121,7 +125,7 @@ class Vector {
   void Reallocate(size_type cap) {
     auto new_begin = alloc_.allocate(cap);
     for (size_t i = 0; i < size(); ++i) {
-      *(new_begin + i) = std::move(*(begin_ + i));
+      alloc_.construct(new_begin + i, std::move(*(begin_ + i)));
     }
     size_t new_size = size();
     alloc_.deallocate(begin_, capacity());
