@@ -20,11 +20,11 @@ class Allocator {
   }
 
   void construct(pointer p, const_reference val ) {
-    new (static_cast<void*>(p)) T(val);
+    new (static_cast<void*>(p)) value_type(val);
   }
 
   void construct(pointer p, r_value val ) {
-    new (static_cast<void*>(p)) T(std::move(val));
+    new (static_cast<void*>(p)) value_type(std::move(val));
   }
 
   void deallocate(pointer ptr, size_type count) {
