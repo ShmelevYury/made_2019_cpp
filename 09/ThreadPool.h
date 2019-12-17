@@ -6,6 +6,7 @@
 #include <functional>
 #include <future>
 #include <queue>
+#include <cassert>
 
 class Functor;
 
@@ -24,7 +25,6 @@ class ThreadPool {
   std::vector<std::thread> pool_;
   std::queue<std::function<void ()>> queue_;
   std::condition_variable notifier_;
-  bool task_ready_ = false;
   bool stop_all_ = false;
 
   std::mutex mutex_;
@@ -37,11 +37,9 @@ auto ThreadPool::exec(Func func, ArgsT... args) {
       std::bind(std::move(func), std::move(args)...));
   auto future = task->get_future();
   {
-    std::unique_lock<std::mutex> locker(mutex_);
+    std::lock_guard<std::mutex> locker(mutex_);
     queue_.emplace([task]() { (*task)(); });
-    task_ready_ = true;
   }
   notifier_.notify_one();
-
   return future;
 }

@@ -1,5 +1,7 @@
 #include "ThreadPool.h"
 
+#include <cassert>
+
 ThreadPool::ThreadPool(size_t pool_size) {
   for (size_t i = 0; i < pool_size; ++i) {
     pool_.emplace_back(std::thread(std::bind(&ThreadPool::RunTask, this)));
@@ -11,7 +13,7 @@ void ThreadPool::RunTask() {
     std::function<void()> task;
     {
       std::unique_lock<std::mutex> locker(mutex_);
-      while (!task_ready_ && !stop_all_) {
+      while (queue_.empty() && !stop_all_) {
         notifier_.wait(locker);
       }
       if (stop_all_) {
@@ -21,7 +23,6 @@ void ThreadPool::RunTask() {
         task = queue_.front();
         queue_.pop();
       }
-      task_ready_ = false;
     }
     task();
   }
